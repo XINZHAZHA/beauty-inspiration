@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: 设置 Python
         uses: actions/setup-python@v5
@@ -36,5 +39,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git add docs/
           git diff --staged --quiet || (git commit -m "📅 更新每日灵感 $(date +'%Y-%m-%d')" && git push)
