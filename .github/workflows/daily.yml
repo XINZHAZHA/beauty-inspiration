@@ -1,0 +1,40 @@
+name: 每日美妆灵感推送
+
+on:
+  schedule:
+    # 每天 8:00 北京时间 (UTC+8) → UTC 0:00
+    - cron: "0 0 * * *"
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  daily-inspiration:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 运行推送流程
+        env:
+          WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
+          WECHAT_APPSECRET: ${{ secrets.WECHAT_APPSECRET }}
+          WECHAT_TEMPLATE_ID: ${{ secrets.WECHAT_TEMPLATE_ID }}
+          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+        run: python main.py
+
+      - name: 提交生成的网页
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --staged --quiet || (git commit -m "📅 更新每日灵感 $(date +'%Y-%m-%d')" && git push)
