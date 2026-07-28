@@ -45,5 +45,5 @@ RSS_FEEDS = [
 # GitHub Pages 配置
 # ============================================================
 SITE_TITLE = "哦王小明 · 每日美妆灵感"
-SITE_URL = "https://xinzha-zha.github.io/beauty-inspiration/"
+SITE_URL = "https://xinzhazha.github.io/beauty-inspiration/"
 PAGE_OUTPUT_DIR = "docs"
