@@ -36,9 +36,6 @@ jobs:
         run: python main.py
 
       - name: 提交生成的网页
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add docs/
-          git diff --staged --quiet || (git commit -m "📅 更新每日灵感 $(date +'%Y-%m-%d')" && git push)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python upload_results.py
